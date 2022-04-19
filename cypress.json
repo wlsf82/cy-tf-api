@@ -1,0 +1,10 @@
+{
+  "baseUrl": "https://admin.typeform.com",
+  "env": {
+    "API_BASE_URL": "https://api.typeform.com/"
+  },
+  "experimentalSessionSupport": true,
+  "pluginsFile": false,
+  "viewportHeight": 1024,
+  "viewportWidth": 1280
+}
