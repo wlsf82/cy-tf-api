@@ -8,19 +8,35 @@ describe('Typeform GUI tests', () => {
   })
 
   context('Form', () => {
-    beforeEach(() => {
-      cy.formsCleanup()
+    beforeEach(() => cy.formsCleanup())
+
+    it('submits a form create via API', () => {
       cy.createSampleForm().should(({ status, body }) => {
         expect(status).to.eq(201)
-        cy.visit(`/form/${body.id}/results#summary`)
-        cy.get('[data-qa="summary-tab"')
-          .should('have.attr', 'aria-selected', 'true')
+        cy.visit(`form/${body.id}/share#/`)
+        cy.get('[data-qa="view-btn"]')
+          .should('be.visible')
+          .invoke('attr', 'href')
+          .then(url => {
+            cy.origin(url, () => {
+              cy.visit('')
+              // cy.get('input[type="text"]')
+              //   .should('be.visible')
+              //   .type('Foo')
+              // cy.contains('[class^="OptionsList"] ul li', 'Foo')
+              //   .should('be.visible')
+              //   .click()
+              // cy.contains('button', 'Submit')
+              //   .should('be.visible')
+              //   .click()
+              // cy.contains('h1', 'Thanks for completing this typeform')
+              //   .should('be.visible')
+            })
+          })
+        cy.getFormResponses(body.id).should(({ body }) => {
+          expect(body.total_items).to.be.gte(0)
+        })
       })
-    })
-
-    it('sees the "No signs of movement" image when accessing the Results\' Summary tab', () => {
-      cy.get('[data-qa="illustration-container"')
-        .should('be.visible')
     })
   })
 })
